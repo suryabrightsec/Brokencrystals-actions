@@ -22,7 +22,7 @@ jobs:
         with:
           api_token: ${{ secrets.BRIGHT_TOKEN}}
           hostname: demo.brightsec.com
-          name: Bright Scan - ${{ github.sha }}
+          name: BC-SDLC-Github Scan - ${{ github.sha }}
           discovery_types: |
             [ "crawler" ]
           crawler_urls: |
