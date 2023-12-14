@@ -23,7 +23,7 @@ jobs:
           api_token: ${{ secrets.BRIGHT_TOKEN}}
           hostname: demo.brightsec.com
           name: BC-SDLC-Github Scan - ${{ github.sha }}
-          restart_scan: vw5aX9Yjsq6i4UhPwFHZNE
+          restart_scan: frSzUHPM2o9cSA8QeFWWCq
       - name: Wait for breakpoint
         id: wait
         uses: NeuraLegion/wait-for@release
