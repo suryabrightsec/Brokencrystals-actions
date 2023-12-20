@@ -25,7 +25,7 @@ jobs:
         with:
           api_token: ${{ secrets.BRIGHT_TOKEN}}
           hostname: app.brightsec.com
-          name: BC-SDLC-Github Scan - ${{ github.sha }}
+          name: SDLC - CICD - Github-Actions scan - ${{ github.sha }}
           restart_scan: gGuXGTkP727ums8dMyFDWN
       - name: Wait for breakpoint
         id: wait
