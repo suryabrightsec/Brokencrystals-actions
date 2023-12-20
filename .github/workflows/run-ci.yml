@@ -31,7 +31,7 @@ jobs:
           api_token:  ${{ secrets.BRIGHT_TOKEN }}
           hostname: app.brightsec.com
           scan: ${{ steps.start.outputs.id }}
-          wait_for: any
+          wait_for: high
           code_scanning_alerts: true
           timeout: 6000
           stop_scan: true
