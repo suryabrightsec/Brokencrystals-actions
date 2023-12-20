@@ -1,4 +1,4 @@
-name: gh-clil-full
+name: gh-cli-full
 
 on: workflow_dispatch
 #on:
