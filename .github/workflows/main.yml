@@ -27,10 +27,8 @@ jobs:
           hostname: app.brightsec.com
           name: BC-SDLC-Github HAR Scan - ${{ github.sha }}
           discovery_types: |
-            [ "crawler", "archive" ]
-          crawler_urls: |
-            [ "https://brokencrystals.com/" ]
-            file_id: q7JhmGdbF4vyKGQEpAHUt9
+            ["archive" ]
+          file_id: q7JhmGdbF4vyKGQEpAHUt9
       - name: Wait for breakpoint
         id: wait
         uses: NeuraLegion/wait-for@release
