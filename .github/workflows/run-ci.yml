@@ -33,6 +33,5 @@ jobs:
           scan: ${{ steps.start.outputs.id }}
           wait_for: any
           code_scanning_alerts: true
-          github_token: ${{ secrets.KEY_GITHUB }}
           timeout: 6000
           stop_scan: true
