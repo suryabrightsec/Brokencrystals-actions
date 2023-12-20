@@ -1,14 +1,17 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - crawler
-      - har-file
-      - swagger
-      - brokencrystals
-  pull_request:
-    branches: [main]
+on: workflow_dispatch
+#on:
+#  push:
+#    branches:
+#      - crawler
+#      - har-file
+#      - swagger
+#      - brokencrystals
+#  pull_request:
+#    branches: [main]
+#  schedule:
+#    - cron: "0 0 * * THU"
 
 jobs:
   wait_for:
