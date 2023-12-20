@@ -1,4 +1,4 @@
-name: CI-Har
+name: gh-Har
 
 on: workflow_dispatch
 #on:
