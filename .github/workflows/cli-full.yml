@@ -42,7 +42,7 @@ jobs:
       - name: Wait for issues ⏳
         run: |
           echo "POLLING_RESULT=Stop" >> $GITHUB_ENV
-          POLLING_RESULT=$(bright-cli scan:polling  --interval 30s   --timeout 101m --token ${{ secrets.BRIGHT_TOKEN }} --breakpoint critical_issue $SCAN_ID  --cluster app.brightsec.com)
+          POLLING_RESULT=$(bright-cli scan:polling  --interval 30s   --timeout 15m --token ${{ secrets.BRIGHT_TOKEN }} --breakpoint critical_issue $SCAN_ID  --cluster app.brightsec.com)
           echo "POLLING_RESULT=$POLLING_RESULT" >> $GITHUB_ENV
       - name: Stop Scan 🛑
         continue-on-error: true
