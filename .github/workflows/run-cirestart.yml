@@ -1,4 +1,4 @@
-name: CI-restart
+name: gh-restart
 
 on: workflow_dispatch
 #on:
