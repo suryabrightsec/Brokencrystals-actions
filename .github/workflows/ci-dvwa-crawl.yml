@@ -25,7 +25,7 @@ jobs:
         with:
           api_token: ${{ secrets.BRIGHT_TOKEN}}
           hostname: app.brightsec.com
-          name: SDLC - CICD - Github Actions - Crawl-HAR Scan - ${{ github.sha }}
+          name: DVWA - SDLC - CICD - Github Actions - Crawl-HAR Scan -  ${{ github.sha }}
           discovery_types: |
             [ "crawler"]
           crawler_urls: |
