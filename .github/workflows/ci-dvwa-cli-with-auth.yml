@@ -34,19 +34,19 @@ jobs:
       - name: Start Brightsec Scan 🏁
         id: start
         run: |
-          SCAN_ID=$(bright-cli scan:run --token ${{ secrets.BRIGHT_TOKEN }} --name "💎 Local GH BrokenCrystals for a '${GITHUB_REF##*/}' branch #${GITHUB_RUN_NUMBER}" --test csrf dom_xss header_security secret_tokens open_buckets excessive_data_exposure --crawler https://brokencrystals.com/  --repeater ${{ secrets.REPEATER5 }}  --auth ${{ secrets.BC_LESSB_AUTH5 }}  --project ${{ secrets.PROJECT5 }}  --cluster app.brightsec.com)  
+          SCAN_ID=$(bright-cli scan:run --token ${{ secrets.BRIGHT_TOKEN }} --name "💎 Local GH BrokenCrystals for a '${GITHUB_REF##*/}' branch #${GITHUB_RUN_NUMBER}" --test csrf dom_xss header_security secret_tokens open_buckets excessive_data_exposure --crawler https://brokencrystals.com/  --repeater ${{ secrets.REPEATER5 }}  --auth ${{ secrets.BC_LESSB_AUTH5 }}  --project ${{ secrets.PROJECT5 }}  --cluster eu.brightsec.com)  
           echo "SCAN_ID=$SCAN_ID" >> $GITHUB_ENV
       - name: Get the output scan url 🔗
         run: |
-          printf "Scan was started, check the details at https://app.brightsec.com/scans/$SCAN_ID"
+          printf "Scan was started, check the details at https://eu.brightsec.com/scans/$SCAN_ID"
       - name: Wait for issues ⏳
         run: |
           echo "POLLING_RESULT=Stop" >> $GITHUB_ENV
-          POLLING_RESULT=$(bright-cli scan:polling  --interval 30s   --timeout 15m --token ${{ secrets.BRIGHT_TOKEN }} --breakpoint critical_issue $SCAN_ID  --cluster app.brightsec.com)
+          POLLING_RESULT=$(bright-cli scan:polling  --interval 30s   --timeout 15m --token ${{ secrets.BRIGHT_TOKEN }} --breakpoint critical_issue $SCAN_ID  --cluster eu.brightsec.com)
           echo "POLLING_RESULT=$POLLING_RESULT" >> $GITHUB_ENV
       - name: Stop Scan 🛑
         continue-on-error: true
         if: ${{ failure() }}
         run: |
           printf "Polling result was $POLLING_RESULT"
-          bright-cli scan:stop --token ${{ secrets.BRIGHT_TOKEN }} $SCAN_ID --cluster app.brightsec.com
+          bright-cli scan:stop --token ${{ secrets.BRIGHT_TOKEN }} $SCAN_ID --cluster eu.brightsec.com
