@@ -24,7 +24,7 @@ jobs:
         uses: NeuraLegion/run-scan@release
         with:
           api_token: ${{ secrets.BRIGHT_TOKEN}}
-          hostname: app.brightsec.com
+          hostname: eu.brightsec.com
           name: DVWA - SDLC - CICD - Github Actions - Crawl-HAR Scan -  ${{ github.sha }}
           discovery_types: |
             [ "crawler"]
@@ -36,7 +36,7 @@ jobs:
         uses: NeuraLegion/wait-for@release
         with:
           api_token:  ${{ secrets.BRIGHT_TOKEN }}
-          hostname: app.brightsec.com
+          hostname: eu.brightsec.com
           scan: ${{ steps.start.outputs.id }}
           wait_for: any
           code_scanning_alerts: true
