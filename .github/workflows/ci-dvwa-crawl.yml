@@ -38,8 +38,7 @@ jobs:
           api_token:  ${{ secrets.BRIGHT_TOKEN }}
           hostname: eu.brightsec.com
           scan: ${{ steps.start.outputs.id }}
-          wait_for: any
           code_scanning_alerts: true
           github_token: ${{ secrets.KEY_GITHUB }}
-          timeout: 3000
-          stop_scan: true
+
+
