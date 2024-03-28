@@ -1,0 +1,82 @@
+image: ubuntu:20.04
+
+variables:
+  scanName: 'Gitlab Demo'
+  tests: 'header_security secret_tokens xss csrf jwt open_buckets'
+  module: 'dast'
+  smart: 'true'
+  bucketType: ''
+  ntlmFlag: ''  
+  parameter: 'query fragment body'
+  templateID: ''
+  excludeParam: ''
+  projectID: 'ioguBfrwRX66QrnmxKYpfP'
+  authObject: 'b9REE4uhmfZ44y77tRkpkB'
+  repeaterId: ''
+  BRIGHT_TOKEN: $BRIGHT_TOKEN
+  discoveryID: '3C15FLBSBbWkQigcnEvb6i'
+  archiveID: ''
+  targetUrl: ''
+  NODE_VERSION: "10"
+
+stages:
+  - build_stage
+  - run_bright_scan
+
+before_run_bright_scan:
+  stage: build_stage
+  script:
+    - echo "Hello World"
+
+run_bright_scan:
+  stage: run_bright_scan
+  before_script:
+  - apt -qq update -qq --fix-missing
+  - apt -qq install -y --no-install-recommends nodejs npm make g++
+  - npm install @brightsec/cli -g --unsafe-perm || true
+  - apt -qq install curl -y
+  - apt -qq install gzip -y
+  - bright-cli --version
+  script:
+  - echo "Attempting to download HAR file from discovery"
+  - |
+    curl -sS -X 'GET' "https://app.brightsec.com/api/v2/projects/${projectID}/discoveries/${discoveryID}/entry-points/har?gt=0&gte=0&lt=0&lte=0" \
+    -H 'accept:application/gzip' \
+    -H "Authorization: api-key ${BRIGHT_TOKEN}" \
+    -o "${CI_PROJECT_DIR}/archive_file.har.gz"
+  - gzip -d ${CI_PROJECT_DIR}/archive_file.har.gz
+  - echo "Attempting to upload HAR file..."
+  - bright-cli archive:upload --token $BRIGHT_TOKEN --projectId ${projectID} ${CI_PROJECT_DIR}/archive_file.har > ${CI_PROJECT_DIR}/output.log || echo "Failed to upload HAR file"
+  - archiveID=$(cat "${CI_PROJECT_DIR}/output.log")
+  - echo "${archiveID}"
+  - echo "Start Bright Scan 🏁"
+  - >
+    SCAN_ID=$(bright-cli scan:run --token "${BRIGHT_TOKEN}" --name "${scanName}" \
+      $( [ -n "${targetUrl}" ] && echo "--crawler=${targetUrl}" ) \
+      $( [ -n "${authObject}" ] && echo "--auth=${authObject}" ) \
+      $( [ -n "${archiveID}" ] && echo "--archive=${archiveID}" ) \
+      $( [ -n "${module}" ] && echo "--module=${module}" ) \
+      $( [ -n "${repeaterId}" ] && echo "--repeater=${repeaterId}" ) \
+      $( [ -n "${tests}" ] && echo "--test ${tests}" ) \
+      $( [ -n "${smart}" ] && echo "--smart ${smart}" ) \
+      $( [ -n "${bucketType}" ] && echo "--bucket ${bucketType}" ) \
+      $( [ -n "${ntlmFlag}" ] && echo "--ntlm ${ntlmFlag}" ) \
+      $( [ -n "${projectID}" ] && echo "--project ${projectID}" ) \
+      $( [ -n "${parameter}" ] && echo "--param ${parameter}" ) \
+      $( [ -n "${templateID}" ] && echo "--template ${templateID}" )) || (echo "Bright scan failed with error code $?" && bright-cli error:report --token "${BRIGHT_TOKEN}" "${SCAN_ID}")
+    - echo "Scan was started with ID https://app.brightsec.com/scans/${SCAN_ID}\n"
+    - printf "Wait for issues ⏳\n"
+    - >
+      (bright-cli scan:polling
+      --interval 30s
+      --timeout 20m
+      --token $BRIGHT_TOKEN
+      --breakpoint medium_issue $SCAN_ID)
+  allow_failure: true
+  after_script:
+  - >
+    echo "Stop Scan 🛑"
+    bright-cli scan:stop --token $BRIGHT_TOKEN $SCAN_ID
+  artifacts:
+    paths:
+      - ${CI_PROJECT_DIR}/archive_file.har
